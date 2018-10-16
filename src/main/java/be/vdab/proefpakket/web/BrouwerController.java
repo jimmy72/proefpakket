@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,6 +34,7 @@ public class BrouwerController {
 	private static final String REDIRECT_NA_ONDERNEMINGSNR = "redirect:/brouwers/{id}";
 	private static final String PROEFPAKKET_STAP1_VIEW = "brouwers/proefpakket/stap1";
 	private static final String PROEFPAKKET_STAP2_VIEW = "brouwers/proefpakket/stap2";
+	private static final String REDIRECT_NA_BESTELLING = "redirect:/";
 	private final BrouwerService brouwerService;
 	private final GemeenteService gemeenteService;
 	private final BestellingService bestellingService;
@@ -41,6 +43,11 @@ public class BrouwerController {
 		this.brouwerService = brouwerService;
 		this.gemeenteService = gemeenteService;
 		this.bestellingService = bestellingService;
+	}
+	
+	@InitBinder("bestelling")
+	void initBinder(DataBinder binder) {
+		binder.initDirectFieldAccess();
 	}
 
 	@GetMapping(value = "{brouwer}")
@@ -69,12 +76,9 @@ public class BrouwerController {
 	
 	@PostMapping(value = "{brouwer}/ondernemingsnummer")
 	ModelAndView bewaarOndernemingsNummer(@PathVariable Optional<Brouwer> brouwer, 
-			@Valid OndernemingsNummerForm form,
-			BindingResult bindingResult, 
-			RedirectAttributes redirectAttributes) {
+			@Valid OndernemingsNummerForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		if(brouwer.isPresent()) {
 			if(bindingResult.hasErrors()) {
-				
 				return new ModelAndView(BROUWER_ONDERNEMINGSNUMMER_VIEW).addObject("brouwer", brouwer.get());
 			}
 			brouwer.get().setOndernemingsNr(form.getOndernemingsNummer());
@@ -88,7 +92,7 @@ public class BrouwerController {
 	}
 	
 	@GetMapping(value = "{brouwer}/proefpakket")
-	ModelAndView proefPakket(@PathVariable Optional<Brouwer> brouwer, 
+	ModelAndView proefPakketStap1(@PathVariable Optional<Brouwer> brouwer, 
 			RedirectAttributes redirectAttributes) {
 		
 		if(brouwer.isPresent()) {
@@ -118,9 +122,32 @@ public class BrouwerController {
 		return new ModelAndView(REDIRECT_URL_BROUWER_NIET_GEVONDEN);
 	}
 	
-	@InitBinder("bestelling")
-	void initBinder(DataBinder binder) {
-		binder.initDirectFieldAccess();
+	@PostMapping(value = "{brouwer}/proefpakket", params = "stap1")
+	ModelAndView proefPakketStap2NaarStap1(@PathVariable Optional<Brouwer> brouwer, 
+			Bestelling bestelling, RedirectAttributes redirectAttributes) {
+		if (brouwer.isPresent()) {
+			return new ModelAndView(PROEFPAKKET_STAP1_VIEW).addObject("brouwer", brouwer.get());
+		}
+		redirectAttributes.addAttribute("fout", "Brouwer niet gevonden");
+		return new ModelAndView(REDIRECT_URL_BROUWER_NIET_GEVONDEN);
+	}
+	
+	@PostMapping(value = "{brouwer}/proefpakket", params = "opslaan")
+	ModelAndView proefPakketOpslaan(@PathVariable Optional<Brouwer> brouwer,
+			@Validated(Bestelling.Stap2.class) Bestelling bestelling, 
+			BindingResult bindingResult, SessionStatus sessionStatus, RedirectAttributes redirectAttributes) {
+		if(brouwer.isPresent()) {
+			if(bindingResult.hasErrors()) {
+				return new ModelAndView(PROEFPAKKET_STAP2_VIEW)
+						.addObject("brouwer", brouwer.get())
+						.addObject("gemeenten", gemeenteService.findAll());
+			}
+			bestellingService.create(bestelling);
+			sessionStatus.setComplete();
+			return new ModelAndView(REDIRECT_NA_BESTELLING);
+		}
+		redirectAttributes.addAttribute("fout", "Brouwer niet gevonden");
+		return new ModelAndView(REDIRECT_URL_BROUWER_NIET_GEVONDEN);
 	}
 	
 }
