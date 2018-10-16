@@ -102,7 +102,10 @@ public class BrouwerController {
 	}
 	
 	@PostMapping(value = "{brouwer}/proefpakket", params = "stap2")
-	ModelAndView proefPakketStap1NaarStap2(@PathVariable Optional<Brouwer> brouwer, @Validated(Bestelling.Stap1.class) Bestelling bestelling, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	ModelAndView proefPakketStap1NaarStap2(@PathVariable Optional<Brouwer> brouwer, 
+			@Validated(Bestelling.Stap1.class) Bestelling bestelling, 
+			BindingResult bindingResult, 
+			RedirectAttributes redirectAttributes) {
 		if (brouwer.isPresent()) {
 			if (bindingResult.hasErrors()) {
 				return new ModelAndView(PROEFPAKKET_STAP1_VIEW).addObject("brouwer", brouwer.get());

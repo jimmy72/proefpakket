@@ -43,7 +43,7 @@ public class Bestelling implements Serializable {
 	@SafeHtml(groups = Stap1.class)
 	private String familienaam;
 	
-	@NotNull(groups = Stap1.class)
+	@NotBlank(groups = Stap1.class)
 	@Email(groups = Stap1.class)
 	private String emailAdres;
 	
