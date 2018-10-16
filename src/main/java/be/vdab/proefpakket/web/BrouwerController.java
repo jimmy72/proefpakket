@@ -80,7 +80,6 @@ public class BrouwerController {
 			}
 			brouwer.get().setOndernemingsNr(form.getOndernemingsNummer());
 			brouwerService.update(brouwer.get());
-			System.out.println("gelukt");
 			redirectAttributes.addAttribute("id", brouwer.get().getId());
 			return new ModelAndView(REDIRECT_NA_ONDERNEMINGSNR);
 		}
