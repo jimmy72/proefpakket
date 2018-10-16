@@ -45,10 +45,7 @@ public class BrouwerController {
 		this.bestellingService = bestellingService;
 	}
 	
-	@InitBinder("bestelling")
-	void initBinder(DataBinder binder) {
-		binder.initDirectFieldAccess();
-	}
+	
 
 	@GetMapping(value = "{brouwer}")
 	ModelAndView readBrouwer(@PathVariable Optional<Brouwer> brouwer, 
@@ -103,6 +100,11 @@ public class BrouwerController {
 		redirectAttributes.addAttribute("fout", "Brouwer niet gevonden");
 		return new ModelAndView(REDIRECT_URL_BROUWER_NIET_GEVONDEN);
 		
+	}
+	
+	@InitBinder("bestelling")
+	void initBinder(DataBinder binder) {
+		binder.initDirectFieldAccess();
 	}
 	
 	@PostMapping(value = "{brouwer}/proefpakket", params = "stap2")
