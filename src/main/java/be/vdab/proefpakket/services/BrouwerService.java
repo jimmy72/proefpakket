@@ -5,5 +5,6 @@ import java.util.List;
 import be.vdab.proefpakket.entities.Brouwer;
 
 public interface BrouwerService {
-	List<Brouwer> findByBeginNaam(String beginNaam);
+	public abstract List<Brouwer> findByBeginNaam(String beginNaam);
+	public abstract void update(Brouwer brouwer);
 }

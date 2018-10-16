@@ -2,7 +2,6 @@ package be.vdab.proefpakket.services;
 
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,10 @@ public class DefaultBrouwerService implements BrouwerService {
 		return repository.findByNaamStartingWithOrderByNaam(beginNaam);
 	}
 
+	@Transactional(readOnly = false, isolation = Isolation.READ_COMMITTED)
+	@Override
+	public void update(Brouwer brouwer) {
+		repository.save(brouwer);
+	}
 
-	
 }

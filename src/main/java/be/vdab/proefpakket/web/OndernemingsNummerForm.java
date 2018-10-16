@@ -8,14 +8,14 @@ public class OndernemingsNummerForm {
 
 	@NotNull
 	@OndernemingsNummer
-	private Long ondernemingsNr;
+	private Long ondernemingsNummer;
 
-	public Long getOndernemingsNr() {
-		return ondernemingsNr;
+	public Long getOndernemingsNummer() {
+		return ondernemingsNummer;
 	}
 
-	public void setOndernemingsNr(Long ondernemingsNr) {
-		this.ondernemingsNr = ondernemingsNr;
+	public void setOndernemingsNummer(Long ondernemingsNummer) {
+		this.ondernemingsNummer = ondernemingsNummer;
 	}
 	
 }
