@@ -11,7 +11,7 @@ import be.vdab.proefpakket.repositories.BrouwerRepository;
 
 @Service
 @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-public class DefaultBrouwerService implements BrouwerService {
+class DefaultBrouwerService implements BrouwerService {
 
 	private final BrouwerRepository repository;
 	
