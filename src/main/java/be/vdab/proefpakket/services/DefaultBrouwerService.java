@@ -1,7 +1,9 @@
 package be.vdab.proefpakket.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,17 @@ class DefaultBrouwerService implements BrouwerService {
 	@Override
 	public void update(Brouwer brouwer) {
 		repository.save(brouwer);
+	}
+
+
+	@Override
+	public char[] findBeginLetters() {
+		List<Brouwer> brouwers = this.repository.findAll(Sort.by("naam"));
+		return brouwers.stream()
+			.map(br -> br.getNaam().substring(0, 1).toUpperCase())
+			.distinct()
+			.collect(Collectors.joining())
+			.toCharArray();
 	}
 
 }

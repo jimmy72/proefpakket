@@ -12,7 +12,7 @@ import be.vdab.proefpakket.services.BrouwerService;
 public class IndexController {
 	private static final String VIEW = "index";
 	private final BrouwerService brouwerService;
-	private final char[] alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+	//private final char[] alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 	
 	
 	
@@ -22,12 +22,13 @@ public class IndexController {
 
 	@GetMapping
 	ModelAndView index() {
-		return new ModelAndView(VIEW, "alfabet", this.alfabet);
+		return new ModelAndView(VIEW, "alfabet", this.brouwerService.findBeginLetters());
+		//return new ModelAndView(VIEW, "alfabet", this.alfabet);
 	}
 	
 	@GetMapping(params = "letter")
 	ModelAndView beginletter(String letter) {
-		return new ModelAndView(VIEW, "alfabet", this.alfabet)
+		return new ModelAndView(VIEW, "alfabet", this.brouwerService.findBeginLetters())
 				.addObject("brouwers", brouwerService.findByBeginNaam(letter));
 	}
 }
