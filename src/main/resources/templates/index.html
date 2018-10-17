@@ -15,9 +15,10 @@
 		<li th:each='brouwer:${brouwers}'>
 		<a th:href='@{/brouwers/{id}(id=${brouwer.id})}' th:text='${brouwer.naam}'>	</a>
 		</li>
-		<li><a th:href='@{?locale=nl_BE}'>Nederlands</a></li>
-		<li><a th:href='@{?locale=fr_BE}'>Français</a></li>
+		
 	</ul>
-	
+	<br>
+	<a th:href='@{?locale=nl_BE}'>Nederlands</a>
+	<a th:href='@{?locale=fr_BE}'>Français</a>
 </body>
 </html>
