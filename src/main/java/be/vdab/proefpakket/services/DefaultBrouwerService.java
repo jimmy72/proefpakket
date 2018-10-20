@@ -35,6 +35,7 @@ class DefaultBrouwerService implements BrouwerService {
 	}
 
 
+	//EIGEN INTERPRETATIE
 	@Override
 	public char[] findBeginLetters() {
 		List<Brouwer> brouwers = this.repository.findAll(Sort.by("naam"));
